@@ -10,16 +10,18 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Verify Files
+        run: ls -la
 
       - name: Deploy Website
         run: |
+          sudo mkdir -p /var/www/html
           sudo rsync -av --delete \
             --exclude='.git' \
             --exclude='.github' \
             ./ /var/www/html/
 
       - name: Restart Nginx
-        run: |
-          sudo systemctl restart nginx
+        run: sudo systemctl restart nginx
